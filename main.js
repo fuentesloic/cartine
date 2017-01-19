@@ -18,40 +18,14 @@ const map = L.map('map', {
   layers: [white]
 });
 
-// Création des layerGroup
-
-class OverlayMap {
-  constructor(groupName, federationLayer) {
-    this.groupName = groupName;
-    this.federationLayer = L.layerGroup([]);
-  }
-}
-
 // lancement des web worker pour créer les marker
 
-const markerWorker = new Worker("marker.js");
-const federationWorker = new Worker("federation.js");
+const giveData = new Worker("info.js");
 
-var layerFederationGroup = [];
-federationWorker.onmessage = (federationList) => {
-  const federation = federationList.data;
-  federation.forEach(federation => {
-    federationLayer = new OverlayMap(federation);
-    layerFederationGroup.push(federationLayer);
-  });
-  markerWorker.postMessage("marker");
+let federations = [];
+giveData.onmessage = (informations) => {
+  let [lat, lng, federation, city] = informations.data;
+  let marker = L.marker([lat, lng]).bindPopup(`${city} in ${federation}`).addTo(map);
 };
 
-markerWorker.onmessage = (locations) => {
-  let [lat, lng, federation, city] = locations.data;
-  let marker = L.marker([lat, lng]).bindPopup(`${city} in ${federation}`);
-
-  layerFederationGroup.forEach((layerFederation) => {
-    if (layerFederation.groupName === federation) {
-      console.debug(`add layer for city ${city}`);
-      // ajouter le marker au layerGroup qui correspond
-    }
-  });
-};
-
-federationWorker.postMessage("federation");
+giveData.postMessage("info");
