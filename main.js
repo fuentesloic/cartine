@@ -18,40 +18,32 @@ const map = L.map('map', {
   layers: [white]
 });
 
-// Création des layerGroup
+// constructor
 
-class OverlayMap {
-  constructor(groupName, federationLayer) {
-    this.groupName = groupName;
-    this.federationLayer = L.layerGroup([]);
+class InitLayer {
+  constructor(federation, lat, lng) {
+    this.federation = L.layerGroup().addLayer(L.marker([lat, lng])).addTo(map);
   }
 }
 
-// lancement des web worker pour créer les marker
+// lancement des web worker pour remonter les datas
 
-const markerWorker = new Worker("marker.js");
-const federationWorker = new Worker("federation.js");
+const giveData = new Worker("info.js");
 
-var layerFederationGroup = [];
-federationWorker.onmessage = (federationList) => {
-  const federation = federationList.data;
-  federation.forEach(federation => {
-    federationLayer = new OverlayMap(federation);
-    layerFederationGroup.push(federationLayer);
-  });
-  markerWorker.postMessage("marker");
+let federations = [];
+giveData.onmessage = (informations) => {
+  let [lat, lng, federation, city] = informations.data;
+  // si federation n'est jamais passé, créer un layerGroup avec son premier marker
+  if (federations.indexOf(federation) === -1 ) {
+    layerGroup = new InitLayer(federation, lat, lng);
+    federations.push(federation);
+    console.log(layerGroup);
+  // sinon créer un marker et l'ajouter au layer groupe de sa fedération
+  } else {
+    let marker = L.marker([lat, lng]).bindPopup(`${city} in ${federation}`);
+  }
+  // faire un marker qui porte
+
 };
 
-markerWorker.onmessage = (locations) => {
-  let [lat, lng, federation, city] = locations.data;
-  let marker = L.marker([lat, lng]).bindPopup(`${city} in ${federation}`);
-
-  layerFederationGroup.forEach((layerFederation) => {
-    if (layerFederation.groupName === federation) {
-      console.debug(`add layer for city ${city}`);
-      // ajouter le marker au layerGroup qui correspond
-    }
-  });
-};
-
-federationWorker.postMessage("federation");
+giveData.postMessage("info");
