@@ -22,7 +22,8 @@ const map = L.map('map', {
 
 class InitLayer {
   constructor(federation, lat, lng) {
-    this.federation = L.layerGroup().addLayer(L.marker([lat, lng])).addTo(map);
+    this.federation = federation;
+    this.layer = L.layerGroup().addLayer(L.marker([lat, lng])).addTo(map);
   }
 }
 
@@ -31,19 +32,19 @@ class InitLayer {
 const giveData = new Worker("info.js");
 
 let federations = [];
+let fedLayers = [];
 giveData.onmessage = (informations) => {
   let [lat, lng, federation, city] = informations.data;
   // si federation n'est jamais passé, créer un layerGroup avec son premier marker
   if (federations.indexOf(federation) === -1 ) {
     layerGroup = new InitLayer(federation, lat, lng);
+    fedLayers.push(layerGroup);
     federations.push(federation);
-    console.log(layerGroup);
   // sinon créer un marker et l'ajouter au layer groupe de sa fedération
   } else {
-    let marker = L.marker([lat, lng]).bindPopup(`${city} in ${federation}`);
+    // var marker = L.marker([lat, lng]);
   }
-  // faire un marker qui porte
-
+  console.debug(fedLayers[0].federation);
 };
 
 giveData.postMessage("info");
