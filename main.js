@@ -18,14 +18,25 @@ const map = L.map('map', {
   layers: [white]
 });
 
-// lancement des web worker pour créer les marker
+// constructor
+
+class Layer {
+  constructor(layerName, federationLayer) {
+    this.layerName = layerName;
+    this.federationLayer = L.layerGroup([]);
+  }
+}
+
+// lancement des web worker pour remonter les datas
 
 const giveData = new Worker("info.js");
 
 let federations = [];
 giveData.onmessage = (informations) => {
   let [lat, lng, federation, city] = informations.data;
+  // si la fédération est déja passé mettre le marker dans le layer correspondant
   let marker = L.marker([lat, lng]).bindPopup(`${city} in ${federation}`).addTo(map);
+  // si la fédération n'est jamais passé, créer et un layer
 };
 
 giveData.postMessage("info");
