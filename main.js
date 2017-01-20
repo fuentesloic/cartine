@@ -23,7 +23,7 @@ const map = L.map('map', {
 class InitLayer {
   constructor(federation, lat, lng) {
     this.federation = federation;
-    this.layer = L.layerGroup().addLayer(L.marker([lat, lng]).addTo(map));
+    this.layer = L.layerGroup().addLayer(L.marker([lat, lng]));
   }
 }
 
@@ -46,7 +46,7 @@ giveData.onmessage = (informations) => {
     for (var i = 0; i < fedLayers.length; i++) {
       // cherche si la fédération est dans un des layer qui porte le même nom
       if (fedLayers[i].federation === federation) {
-        fedLayers[i].layer._layers.addLayer(L.marker([lat, lng]).addTo(map));
+        fedLayers[i].layer.addLayer(L.marker([lat, lng]));
       }
     }
   }
