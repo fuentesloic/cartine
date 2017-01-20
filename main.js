@@ -33,22 +33,28 @@ const giveData = new Worker("info.js");
 
 let federations = [];
 let fedLayers = [];
+let compteurBdd = 0;
 giveData.onmessage = (informations) => {
-  let [lat, lng, federation, city] = informations.data;
+  compteurBdd++;
+  let [lat, lng, federation, city, length] = informations.data;
   // si federation n'est jamais passé, créer un layerGroup avec son premier marker
   if (federations.indexOf(federation) === -1 ) {
     layerGroup = new InitLayer(federation, lat, lng);
     fedLayers.push(layerGroup);
     federations.push(federation);
   // si federation existe alors
-  } else {
+  } else if ( length !== compteurBdd ){
     // chercher dans les layer déja fait
     for (var i = 0; i < fedLayers.length; i++) {
       // cherche si la fédération est dans un des layer qui porte le même nom
       if (fedLayers[i].federation === federation) {
+        // rajoute le marker
         fedLayers[i].layer.addLayer(L.marker([lat, lng]));
       }
     }
+  }
+  else {
+    console.debug(`${compteurBdd}/${length} marker ont étaient créés`);
   }
 };
 
