@@ -35,24 +35,33 @@ let federations = [];
 let fedLayers = [];
 let compteurBdd = 0;
 giveData.onmessage = (informations) => {
+  // forEach date put one more in compteur, at the end we'll know if it's finish or not (cf last else)
   compteurBdd++;
+  //information from webworker bitch !
   let [lat, lng, federation, city, length] = informations.data;
-  // si federation n'est jamais passé, créer un layerGroup avec son premier marker
+
+  // looking for it's the first time for this federation, if yes so do ...
   if (federations.indexOf(federation) === -1 ) {
+    // initiate a layerGroup with is first marker and an federation attribute to reconize it
     layerGroup = new InitLayer(federation, lat, lng);
+    // increase layerGroup to iterate inside after
     fedLayers.push(layerGroup);
+    // increase federation to iterate inside after
     federations.push(federation);
-  // si federation existe alors
+
+  // ... if not and the are again item in
   } else if ( length !== compteurBdd ){
-    // chercher dans les layer déja fait
+    // looking for grab the good federation Layer item
     for (var i = 0; i < fedLayers.length; i++) {
-      // cherche si la fédération est dans un des layer qui porte le même nom
+      // when find do ...
       if (fedLayers[i].federation === federation) {
-        // rajoute le marker
+        // ... add marker into layerGroup according its federation
         fedLayers[i].layer.addLayer(L.marker([lat, lng]));
       }
     }
   }
+
+  // put controller according the layerGroup in fedLayer[]
   else {
     console.debug(`${compteurBdd}/${length} marker ont étaient créés`);
   }
