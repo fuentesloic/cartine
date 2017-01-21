@@ -26,7 +26,7 @@ let federations = {};
 let infoCount = 0;
 
 giveData.onmessage = (informations) => {
-  infoCount++
+  infoCount++;
   let [lat, lng, federation, city, length] = informations.data;
   // federation key is not registered yet
   if (!(federation in federations)) {
@@ -39,7 +39,7 @@ giveData.onmessage = (informations) => {
   // info counter
   console.info(`${infoCount}/${length} markers were created.`);
   if(infoCount === length) {
-    console.info('done!')
+    console.info('done!');
   }
 };
 

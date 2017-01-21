@@ -12,7 +12,7 @@ onmessage = _ => {
       let length = items.length;
       items.forEach(item => {
         let [lat, long] = item.geometry.coordinates;
-        let {subcountry, city} = item.properties
+        let {subcountry, city} = item.properties;
         postMessage([long, lat, subcountry, city, length]);
       });
     });
