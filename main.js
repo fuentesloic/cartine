@@ -1,6 +1,6 @@
 /* jshint esversion: 6 */
 
-// Valeurs initiale de la carte
+// init map
 
 const map = L.map('map', {
   center: [50, -100],
@@ -10,16 +10,7 @@ const map = L.map('map', {
   ]
 });
 
-// constructor
-
-class InitLayer {
-  constructor(federation, lat, lng) {
-    this.federation = federation;
-    this.layer = L.layerGroup().addLayer(L.marker([lat, lng]));
-  }
-}
-
-// lancement des web worker pour remonter les datas
+// web worker run
 
 const giveData = new Worker("info.js");
 let federationLayers = {};
