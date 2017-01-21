@@ -22,24 +22,24 @@ class InitLayer {
 // lancement des web worker pour remonter les datas
 
 const giveData = new Worker("info.js");
-let federations = {};
+let federationLayers = {};
 let infoCount = 0;
 
 giveData.onmessage = (informations) => {
   infoCount++;
   let [lat, lng, federation, city, length] = informations.data;
   // federation key is not registered yet
-  if (!(federation in federations)) {
-    federations[federation] = [];
+  if (!(federation in federationLayers)) {
+    federationLayers[federation] = L.layerGroup();
   }
   // add the layer to the current federation
-  let fedLayer = new InitLayer(federation, lat, lng);
-  federations[federation].push(fedLayer);
+  federationLayers[federation].addLayer(L.marker([lat, lng]).bindPopup(`${city} in ${federation}`));
 
   // info counter
   console.info(`${infoCount}/${length} markers were created.`);
   if(infoCount === length) {
     console.info('done!');
+    L.control.layers(federationLayers).addTo(map);
   }
 };
 
