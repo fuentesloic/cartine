@@ -29,6 +29,32 @@
     }, {
         "type": "Feature",
         "properties": {
+            "phone": "xxx-xxx-xxx",
+            "street": "rue",
+            "city": "Rushmore",
+            "subcountry": "N1",
+            "country": "USA"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": ["-103.459825", "42.8789472"]
+        }
+    },  {
+        "type": "Feature",
+        "properties": {
+            "phone": "xxx-xxx-xxx",
+            "street": "rue",
+            "city": "Rushmore",
+            "subcountry": "N2",
+            "country": "USA"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": ["-103.459825", "44.8789472"]
+        }
+    },  {
+        "type": "Feature",
+        "properties": {
             "phone": "416-596-0101",
             "street": "527-529 King Street West",
             "city": "Toronto",
