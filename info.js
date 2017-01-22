@@ -1,7 +1,7 @@
 /* jshint esversion: 6 */
 
-onmessage = _ => {
-
+onmessage = countrySelected => {
+  console.log(countrySelected.data);
   fetch('locales.json')
     .then(response => {
       return response.json();
@@ -12,8 +12,8 @@ onmessage = _ => {
       let length = items.length;
       items.forEach(item => {
         let [lat, long] = item.geometry.coordinates;
-        let {subcountry, city} = item.properties;
-        postMessage([long, lat, subcountry, city, length]);
+        let {subcountry, city, country} = item.properties;
+        postMessage([long, lat, subcountry, city, length, country]);
       });
     });
 };

@@ -17,8 +17,8 @@ let federationLayers = {};
 let infoCount = 0;
 
 giveData.onmessage = (informations) => {
+  let [lat, lng, federation, city, length, country] = informations.data;
   infoCount++;
-  let [lat, lng, federation, city, length] = informations.data;
   // federation key is not registered yet
   if (!(federation in federationLayers)) {
     federationLayers[federation] = L.layerGroup();
@@ -27,11 +27,15 @@ giveData.onmessage = (informations) => {
   federationLayers[federation].addLayer(L.marker([lat, lng]).bindPopup(`${city} in ${federation}`));
 
   // info counter
-  console.info(`${infoCount}/${length} markers were created.`);
   if(infoCount === length) {
-    console.info('done!');
+    console.info(`${infoCount}/${length} markers were created.`);
     L.control.layers(federationLayers).addTo(map);
   }
 };
 
-giveData.postMessage("info");
+selectCountry = _ => {
+  var select = document.getElementById("selectCountry");
+  var countryValue = select.options[select.selectedIndex].value;
+
+  giveData.postMessage(countryValue);
+};
