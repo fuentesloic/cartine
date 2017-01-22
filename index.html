@@ -13,7 +13,11 @@
 
   <body>
     <header>
-      <h1>Federation du Canada</h1>
+      <select id="selectCountry" onchange="selectCountry()">
+        <option value="" select="selected">Selectionner un pays ...</option>
+        <option value="CA" >Canada</option>
+        <option value="USA">Etats-Unis d'Amérique</option>
+      </select>
     </header>
     <main>
       <section id="map"></section>
