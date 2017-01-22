@@ -9,7 +9,6 @@ onmessage = countryValue => {
     .then(json => {
       const items = json.features;
       const countrySelected = countryValue.data;
-      console.log(countrySelected);
       let length = items.length;
       items.forEach(item => {
         let [lat, long] = item.geometry.coordinates;

@@ -31,6 +31,7 @@ countriesList.postMessage("send countries");
 
 let federationLayers = {};
 let infoCount = 0;
+let federationCount = 0;
 giveData.onmessage = (informations) => {
   let [lat, lng, federation, city, length, country, countrySelected] = informations.data;
   infoCount++;
@@ -38,14 +39,18 @@ giveData.onmessage = (informations) => {
   if (country === countrySelected) {
     if (!(federation in federationLayers)) {
       federationLayers[federation] = L.layerGroup();
+      federationCount++;
     }
     // add the layer to the current federation
     federationLayers[federation].addLayer(L.marker([lat, lng]).bindPopup(`${city} in ${federation}`));
   }
   // info counter
   if(infoCount === length) {
-    L.control.layers(federationLayers).addTo(map);
-    infoCount = 0;
+    if (federationCount < 0) {
+      L.control.layers(federationLayers).addTo(map);
+      infoCount = 0;
+    }
+    alert(`malgré ${length} starbucks, il n'y en a pas en ${country}`);
   }
 };
 
