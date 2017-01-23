@@ -12,15 +12,7 @@ const map = L.map('map', {
 
 // marker web Worker
 
-var markers1 = L.markerClusterGroup();
-var markers2 = L.markerClusterGroup();
-var markers3 = L.markerClusterGroup();
-var markers4 = L.markerClusterGroup();
-var markers5 = L.markerClusterGroup();
-markers1.addLayer(L.marker([40,-100]));
-markers2.addLayer(L.marker([50,-100]));
-markers3.addLayer(L.marker([40,-110]));
-markers4.addLayer(L.marker([40,-150]));
-markers4.addLayer(L.marker([40,-110]));
+var markers = L.markerClusterGroup();
+markers.addLayer(L.marker([40,50])).addLayer(L.marker([45,50])).addLayer(L.marker([40,50]));
 // ... Add more layers ...
-map.addLayer(markers1).addTo(map);
+map.addLayer(markers);
