@@ -14,9 +14,8 @@ const map = L.map('map', {
 
 const giveData = new Worker("dataWorker.js");
 
-layerGroup = L.markerClusterGroup();
+let layerGroup = L.markerClusterGroup();
 let infoCount = 0;
-
 giveData.onmessage = (informations) => {
   infoCount++;
   let [lat, lng, length] = informations.data;
