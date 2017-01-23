@@ -10,9 +10,18 @@ const map = L.map('map', {
   ]
 });
 
-// marker web Worker
+// web worker run
 
-var markers = L.markerClusterGroup();
-markers.addLayer(L.marker([40,50])).addLayer(L.marker([45,50])).addLayer(L.marker([40,50]));
-// ... Add more layers ...
-map.addLayer(markers);
+const giveData = new Worker("dataWorker.js");
+
+layerGroup = L.markerClusterGroup();
+let infoCount = 0;
+
+giveData.onmessage = (informations) => {
+  infoCount++;
+  let [lat, lng, length] = informations.data;
+  layerGroup.addLayer(L.marker([lat, lng]));
+  map.addLayer(layerGroup);
+};
+
+giveData.postMessage("info");
