@@ -4,7 +4,7 @@
 
 const map = L.map('map', {
   center: [50, -100],
-  zoom: 2,
+  zoom: 3,
   layers: [
     L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibG9pY2Z1ZW50ZXMiLCJhIjoiY2l4cWFvanBwMDAyNzJ3cGJkNnRmanp0diJ9.Wt3BUvjiwJwbfMGHNQFQxg")
   ]
@@ -31,7 +31,6 @@ countriesList.postMessage("send countries");
 
 let federationLayers = {};
 let infoCount = 0;
-let federationCount = 0;
 giveData.onmessage = (informations) => {
   let [lat, lng, federation, city, length, country, countrySelected] = informations.data;
   infoCount++;
@@ -39,18 +38,14 @@ giveData.onmessage = (informations) => {
   if (country === countrySelected) {
     if (!(federation in federationLayers)) {
       federationLayers[federation] = L.layerGroup();
-      federationCount++;
     }
     // add the layer to the current federation
     federationLayers[federation].addLayer(L.marker([lat, lng]).bindPopup(`${city} in ${federation}`));
   }
   // info counter
   if(infoCount === length) {
-    if (federationCount < 0) {
-      L.control.layers(federationLayers).addTo(map);
-      infoCount = 0;
-    }
-    alert(`malgré ${length} starbucks, il n'y en a pas en ${country}`);
+    L.control.layers(federationLayers).addTo(map);
+    infoCount = 0;
   }
 };
 
@@ -61,3 +56,18 @@ selectCountry = _ => {
 
   giveData.postMessage(countryValue);
 };
+
+// return zoom level
+zoomLev = map.getZoom();
+console.log(zoomLev);
+map.on("zoomend", _ => {
+  zoomLev = map.getZoom();
+  console.log(zoomLev);
+  if (zoomLev <= 3){
+    console.info("entre 0 et 3 inclus");
+  } else if (zoomLev > 3 && zoomLev <= 7) {
+    console.info("entre 4 et 7 inclus");
+  } else {
+    console.info("8 et +");
+  }
+});
