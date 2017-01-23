@@ -14,7 +14,7 @@ main {
 
 #map {
   flex-grow: 1;
-  height: 600px;
+  height: 760px;
   width: 600px;
   border: 1px solid #c3c3c3;
 	box-shadow: 1px 1px 3px #D8B1D2;
