@@ -10,17 +10,33 @@ const map = L.map('map', {
   ]
 });
 
+// progress bar
+
+let progressContainer = document.getElementById('progressContainer');
+let progressBar = document.getElementById('progressBar');
+function updateProgressBar(processed, total, elapsed, layersArray) {
+	if (elapsed > 1000) {
+	  progress.style.display = 'block';
+		progressBar.style.width = Math.round(processed/total*100) + '%';
+	}
+	if (processed === total) {
+	progress.style.display = 'none';
+  }
+}
+
 // web worker run
 
 const giveData = new Worker("dataWorker.js");
 
-let layerGroup = L.markerClusterGroup();
+let layerGroup = L.markerClusterGroup({ chunkedLoading: true, chunkProgress: updateProgressBar });
 let infoCount = 0;
 giveData.onmessage = (informations) => {
   infoCount++;
   let [lat, lng, length] = informations.data;
   layerGroup.addLayer(L.marker([lat, lng]));
-  map.addLayer(layerGroup);
+  if (infoCount == length) {
+    map.addLayer(layerGroup);
+  }
 };
 
 giveData.postMessage("info");
