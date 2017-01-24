@@ -14,15 +14,15 @@ const map = L.map('map', {
 
 let progressContainer = document.getElementById('progressContainer');
 let progressBar = document.getElementById('progressBar');
-function updateProgressBar(processed, total, elapsed, layersArray) {
+updateProgressBar = (processed, total, elapsed, layersArray) => {
 	if (elapsed > 1000) {
-	  progress.style.display = 'block';
+	  progressBar.style.display = 'block';
 		progressBar.style.width = Math.round(processed/total*100) + '%';
 	}
 	if (processed === total) {
-	progress.style.display = 'none';
+	progressBar.style.display = 'none';
   }
-}
+};
 
 // web worker run
 
